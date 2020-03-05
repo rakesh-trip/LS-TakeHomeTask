@@ -17,21 +17,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MN5-Hd-b6F">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="152" width="414" height="710"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="lYS-uT-rt3">
+                                <rect key="frame" x="4" y="88" width="414" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="MN5-Hd-b6F" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="IFe-CQ-coa"/>
+                            <constraint firstItem="lYS-uT-rt3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="JVG-ap-rmL"/>
+                            <constraint firstItem="lYS-uT-rt3" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="4" id="aD6-W4-H2l"/>
                             <constraint firstItem="MN5-Hd-b6F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dyg-o7-7Z3"/>
+                            <constraint firstItem="lYS-uT-rt3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="jgS-mq-Tja"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MN5-Hd-b6F" secondAttribute="bottom" id="jpa-1e-kgh"/>
                             <constraint firstItem="MN5-Hd-b6F" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="w04-h5-FwK"/>
+                            <constraint firstItem="MN5-Hd-b6F" firstAttribute="top" secondItem="lYS-uT-rt3" secondAttribute="bottom" constant="8" id="yXq-ZE-Mof"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="lTj-1J-mNC"/>
                     <connections>
+                        <outlet property="searchBar" destination="lYS-uT-rt3" id="AY8-eh-l9T"/>
                         <outlet property="tableView" destination="MN5-Hd-b6F" id="w2W-Ij-KHS"/>
                         <segue destination="X6D-Mm-RBz" kind="show" identifier="showCharacterDetails" id="LG6-AC-c6v"/>
                     </connections>

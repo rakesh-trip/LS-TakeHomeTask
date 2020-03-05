@@ -10,10 +10,12 @@ import UIKit
 
 class StarWarsCharactersViewController: UIViewController {
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     var starWarsCharacter: StarWarsCharacters?
-    var listOfPeople: [StarWarsCharacterDetails]? = []
+    var allCharacters: [StarWarsCharacterDetails]? = []
+    var listOfCharacters: [StarWarsCharacterDetails]? = []
     var url: String? = "https://swapi.co/api/people"
     var spinner = UIActivityIndicatorView(style: .large)
     
@@ -23,6 +25,7 @@ class StarWarsCharactersViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.prefetchDataSource = self
+        searchBar.delegate = self
         self.tableView.tableFooterView = UIView(frame: .zero)
         getCharactersOperation()
     }
@@ -31,7 +34,7 @@ class StarWarsCharactersViewController: UIViewController {
         super.viewWillAppear(animated)
         showLoader()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.async {
@@ -39,6 +42,10 @@ class StarWarsCharactersViewController: UIViewController {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+           self.view.endEditing(true)
+       }
+  
     func showLoader() {
         let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
@@ -74,8 +81,9 @@ class StarWarsCharactersViewController: UIViewController {
                     self?.url = charactersList.next
                     self?.starWarsCharacter = charactersList
                     if let results = charactersList.results {
-                        self?.listOfPeople?.append(contentsOf: results)
+                        self?.listOfCharacters?.append(contentsOf: results)
                         self?.sortByCharacterName()
+                        self!.allCharacters = self!.listOfCharacters
                         self?.tableView.reloadData()
                     }
                 }
@@ -94,21 +102,37 @@ class StarWarsCharactersViewController: UIViewController {
     }
     
     func sortByCharacterName() {
-        listOfPeople = listOfPeople?.sorted { $0.name < $1.name }
+        listOfCharacters = listOfCharacters?.sorted { $0.name < $1.name }
     }
     
 }
 
+extension StarWarsCharactersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == ""
+        {
+            listOfCharacters = allCharacters
+        }
+        else{
+            listOfCharacters = allCharacters?.filter { ($0.name).contains(searchText) }
+        }
+        self.tableView.reloadData()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+           view.endEditing(true)
+      }
+}
 extension StarWarsCharactersViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if listOfPeople?.count == 10 {
+        if listOfCharacters?.count == 10 {
             self.getCharactersOperation()
         }
-        return listOfPeople?.count ?? 0
+        return listOfCharacters?.count ?? 0
     }
     
     func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row >= self.listOfPeople!.count - 1
+        return indexPath.row >= self.listOfCharacters!.count - 1
     }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -119,7 +143,7 @@ extension StarWarsCharactersViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell() //tableView.dequeueReusableCell(withIdentifier: "", for: indexPath)
-        if let person = listOfPeople?[indexPath.row] {
+        if let person = listOfCharacters?[indexPath.row] {
             cell.textLabel?.text = person.name
         }
         return cell
@@ -127,7 +151,7 @@ extension StarWarsCharactersViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let person = listOfPeople?[indexPath.row]
+        if let person = listOfCharacters?[indexPath.row]
         {
             self.performSegue(withIdentifier: "showCharacterDetails", sender: person)
         }
