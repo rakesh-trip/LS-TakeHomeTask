@@ -34,7 +34,7 @@ class StarWarsCharactersViewController: UIViewController {
         super.viewWillAppear(animated)
         showLoader()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.main.async {
@@ -43,9 +43,9 @@ class StarWarsCharactersViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-           self.view.endEditing(true)
-       }
-  
+        self.view.endEditing(true)
+    }
+    
     func showLoader() {
         let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
@@ -120,8 +120,12 @@ extension StarWarsCharactersViewController: UISearchBarDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-           view.endEditing(true)
-      }
+        view.endEditing(true)
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+    }
+    
 }
 extension StarWarsCharactersViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
